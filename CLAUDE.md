@@ -40,12 +40,14 @@ LP-C（無料相談）
 
 | 項目 | 内容 |
 |------|------|
-| ホスティング | Cloudflare Pages（既存の診断ツールと同じ環境） |
-| フロントエンド | React + Cloudflare Pages |
-| AI提案生成 | 軸別の静的テキスト（Anthropic API は使わない） |
+| ホスティング | Cloudflare Pages（GitHub連携・pushで自動デプロイ） |
+| 本番URL | https://sindan-condition.pages.dev/ |
+| フロントエンド | 単一HTMLファイル（React 18 CDN + Babel Standalone） |
 | AI提案生成 | Claude API（claude-haiku-4-5-20251001）+ 静的テキストのフォールバック |
 | メール取得 | 結果画面のゲートでメアド入力 → `WORKER_URL` に POST |
-| バックエンド | Cloudflare Worker（`worker/src/index.js`）|
+| バックエンド | Cloudflare Worker（`worker/src/index.js`）デプロイ済み |
+| Worker URL | https://sindan-condition-worker.kota-m.workers.dev |
+| リード記録 | GAS → Googleスプレッドシートに自動記録（GAS_URL設定済み）|
 
 ---
 
@@ -54,6 +56,11 @@ LP-C（無料相談）
 ```
 sindan_condition/
 ├── CLAUDE.md                          ← このファイル
+├── index.html                         ← 診断ツール本体
+├── worker/
+│   ├── wrangler.toml                  ← Cloudflare Worker設定
+│   └── src/index.js                   ← Worker本体（Claude API呼び出し）
+├── 開発ノート.md                      ← 作業履歴・トラブルシューティング記録
 ├── LP-C_解放を求める後継者_v3.html    ← LP完成版（デザイン・文言確定）
 ├── 診断ツール_質問項目_v2.md          ← 質問・スコアリング・結果画面の設計
 └── 診断ツール_実装方針_v1.md          ← 実装方針・免責・プライバシー文言
@@ -305,8 +312,8 @@ wrangler deploy                          # Workers にデプロイ
 
 ## 作業優先順位
 
-1. **メール送信バックエンドの構築**（Cloudflare Worker → MailerLite等）と `EMAIL_API_URL` の設定
-2. **診断ツールを Cloudflare Pages にデプロイ**（index.html をそのままアップロード）
+1. ~~Cloudflare PagesデプロイとWorkerデプロイ~~ ✅ 完了
+2. ~~GASリード記録~~ ✅ 完了
 3. **CTAリンクを差し替え**（結果画面の `href="#"` を無料相談ページのURLに変更）
 4. **LP-Cの本番実装**（v3のHTMLをSquarespaceに移植または独立ページとして公開）
 5. **note記事①の執筆・公開**（記事末尾CTAに診断ツールのURLを設置）＋ `NOTE_ARTICLES` の設定
