@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>後継者のコンディション診断 | ONE PLANET</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
+      background: #FAF6F0;
+      color: #3A3226;
+      -webkit-font-smoothing: antialiased;
+    }
+    input, textarea, button { font-family: inherit; }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; }
+      #root > div { max-width: 100% !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // デザイントークン（LP-C v3 と統一）
+    const C = {
+      bgWarm:     "#FAF6F0",
+      bgCream:    "#F5EDE0",
+      bgWhite:    "#FFFDF9",
+      textMain:   "#3A3226",
+      textSub:    "#6B5E4F",
+      textLight:  "#9B8E7E",
+      accent:     "#B8784E",
+      accentSoft: "#D4A574",
+      accentDeep: "#8B5E3C",
+      border:     "#E8DFD2",
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // データ定義
+    // ═══════════════════════════════════════════════════════════════
+
+    const AXES = [
+      { id: "A", label: "自分らしさの迷い度", short: "自分らしさ" },
+      { id: "B", label: "溜め込みの度合い",   short: "溜め込み"   },
+      { id: "C", label: "本音の話しやすさ度", short: "本音"       },
+      { id: "D", label: "エネルギーの残量",   short: "エネルギー" },
+    ];
+
+    // 推定平均スコア（/20）— 実データ100件超えたら実値に差し替える
+    const BASELINE = { A: 14, B: 15, C: 16, D: 13 };
+
+    // 出題順はCLAUDE.mdの仕様通り（軸シャッフル済み）
+    const QUESTIONS = [
+      { id: "A1", axis: "A", text: "経営者の集まりや前任の社長と会った後、自分との差に落ち込むことがある" },
+      { id: "B1", axis: "B", text: "不満だと思っても関係性を壊さないように飲み込むことが多い" },
+      { id: "C1", axis: "C", text: "経営の本音を話せる相手が、社内にも社外にもほとんどいない" },
+      { id: "D1", axis: "D", text: "以前はあった仕事へのワクワクは消えていると感じる" },
+      { id: "B2", axis: "B", text: "怒りや不満を感じている相手にではなく自分の中に溜め込んでしまう" },
+      { id: "A2", axis: "A", text: "先代や他の経営者のあり方と自分を比べて、自分には向いていないのでは、と思うことがある" },
+      { id: "D2", axis: "D", text: "月曜の朝や月末の夜に、重い気持ちになることがある" },
+      { id: "C2", axis: "C", text: "「社長は弱みを見せてはいけない」と、どこかで思っている" },
+      { id: "A3", axis: "A", text: "もっと強く出るべき場面で強く出られず、自分を責めることがある" },
+      { id: "D3", axis: "D", text: "会社の将来像は描けるが、自分自身の将来像を考えると詰まる" },
+      { id: "B3", axis: "B", text: "「大人の対応」をした後に、どっと疲れが出ることがある" },
+      { id: "C3", axis: "C", text: "家族にも仕事で本当につらいとは話させてもらえていない" },
+      { id: "D4", axis: "D", text: "「このプレッシャーがずっと続くのか」と思うことがある" },
+      { id: "C4", axis: "C", text: "自分の気持ちを誰かにわかってほしいが、自分からは言い出せない" },
+      { id: "A4", axis: "A", text: "「経営者とはこうあるべき」という理想像が頭にあり、それに届いていない自分にプレッシャーを感じる" },
+      { id: "B4", axis: "B", text: "自分一人で溜め込んでいる気がするのに、そのことを誰にも言えずにいる" },
+    ];
+
+    const OPTIONS = [
+      { label: "まったくない",       value: 1 },
+      { label: "あまりない",         value: 2 },
+      { label: "どちらとも言えない", value: 3 },
+      { label: "ややある",           value: 4 },
+      { label: "よくある",           value: 5 },
+    ];
+
+    const STAGES = [
+      {
+        id: 1, name: "ひとやすみ", range: [16, 34], color: "#7A9E7E",
+        message: "今は大丈夫です。この段階で気づけることに意味があります。",
+        sub: "無理をしている兆候が少ない状態です。ただ、気づきのある今こそ、自分の状態を確認しておく価値があります。",
+      },
+      {
+        id: 2, name: "静かな消耗", range: [35, 54], color: "#B8784E",
+        message: "無理をしている。今のうちに、自分の状態を見直す価値があります。",
+        sub: "表には出ていないけれど、じわじわと消耗している状態です。今が見直しのタイミングかもしれません。",
+      },
+      {
+        id: 3, name: "要・立ち止まる", range: [55, 80], color: "#A05C4A",
+        message: "一人で抱えるのは限界に近い。声に出すことを。",
+        sub: "消耗が深いところまで来ています。一人で抱え込まずに、誰かに話すことが最初の一歩になります。",
+      },
+    ];
+
+    // 最高スコア軸ごとの提案（3つ）
+    const SUGGESTIONS = {
+      A: [
+        "「比べる」をやめるのではなく、「違う」と見る。先代や他の経営者との差は、あなたが別の人間だというだけです。",
+        "あなたが自然体でいられた瞬間を3つ思い出して、紙に書き出してみてください。そこにあなた自身の強みがあります。",
+        "「こうあるべき経営者像」を、他の誰かの言葉ではなく、自分の言葉で定義し直す時間を取ってみましょう。",
+      ],
+      B: [
+        "「飲み込む」前に、まず紙に書いて吐き出す。誰かに見せなくていい。書くだけで少し軽くなります。",
+        "「大人の対応」をした日は、意識的に回復の時間を作る。飲み込んだ分だけ、自分に何かを補充する習慣を。",
+        "週に一度、小さな本音を誰かに話す場を持つ。「実はさ…」と言える相手を一人探すことから始めてみましょう。",
+      ],
+      C: [
+        "「弱みを見せること」と「信頼を失うこと」は別物です。本音を話せる場が、経営者の孤独を和らげる最初の一手になります。",
+        "社外の経営者と月に1回でも会う機会を作ってみてください。立場が近いだけで、話せることが変わります。",
+        "まず一人だけ、何でも話せる人を探すことから始める。コーチでも、同業仲間でも、家族以外の誰かでも。",
+      ],
+      D: [
+        "「やらないこと」を一つ決めて、エネルギーを守る。足し算より引き算が、今の自分には効きます。",
+        "経営者としてではなく、一人の人間として過ごす時間を意識的に作ってみてください。",
+        "将来への不安より、今日一日の小さな手応えに意識を向ける練習をしてみましょう。",
+      ],
+    };
+
+    // 最高スコア軸ごとのコメント
+    const TOP_AXIS_COMMENTS = {
+      A: "他の誰かのコピーになる必要はありません。「こうあるべき」という枠が、あなた自身を苦しめているかもしれません。",
+      B: "優しいがゆえに自分を後回しにしてしまう傾向があります。溜め込みが続くと、気づかないうちに深く消耗します。",
+      C: "一人で抱えるには、経営は重すぎます。本音を話せる場を一つだけ作ることが、最初の一歩になるかもしれません。",
+      D: "エネルギーが消耗している状態です。このまま延長線上の未来に、希望を持ちにくくなっているかもしれません。",
+    };
+
+    // Cloudflare Worker のURL（デプロイ後に設定する。空文字の場合はAI提案スキップ→静的テキストで表示）
+    const WORKER_URL = "";
+
+    // ステージ別おすすめnote記事（記事公開後にURLとタイトルを設定する）
+    const NOTE_ARTICLES = {
+      1: { title: "（ステージ1向けnote記事タイトル）", url: "#" },
+      2: { title: "（ステージ2向けnote記事タイトル）", url: "#" },
+      3: { title: "（ステージ3向けnote記事タイトル）", url: "#" },
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // ユーティリティ
+    // ═══════════════════════════════════════════════════════════════
+
+    function calcAxisScores(answers) {
+      const s = { A: 0, B: 0, C: 0, D: 0 };
+      QUESTIONS.forEach(q => { s[q.axis] += (answers[q.id] || 0); });
+      return s;
+    }
+
+    function calcTotal(answers) {
+      return Object.values(answers).reduce((a, b) => a + b, 0);
+    }
+
+    function getStage(total) {
+      return STAGES.find(s => total >= s.range[0] && total <= s.range[1]);
+    }
+
+    function getTopAxis(axisScores) {
+      return AXES.reduce((top, ax) => axisScores[ax.id] > axisScores[top.id] ? ax : top, AXES[0]);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // レーダーチャート（SVG）
+    // ═══════════════════════════════════════════════════════════════
+
+    function RadarChart({ axisScores }) {
+      const cx = 180, cy = 130, r = 75, MAX = 20;
+
+      // 上=A, 右=B, 下=C, 左=D
+      const DIR = [
+        { axis: "A", dx:  0, dy: -1 },
+        { axis: "B", dx:  1, dy:  0 },
+        { axis: "C", dx:  0, dy:  1 },
+        { axis: "D", dx: -1, dy:  0 },
+      ];
+
+      const pt = (dx, dy, score, max) => [cx + dx * r * (score / max), cy + dy * r * (score / max)];
+      const toPoly = pts => pts.map(p => p.join(",")).join(" ");
+      const toPath = pts => pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ") + "Z";
+
+      const userPts = DIR.map(d => pt(d.dx, d.dy, axisScores[d.axis], MAX));
+      const basePts = DIR.map(d => pt(d.dx, d.dy, BASELINE[d.axis], MAX));
+
+      const LABEL_POS = [
+        { axis: "A", x: cx,          y: cy - r - 24, anchor: "middle" },
+        { axis: "B", x: cx + r + 24, y: cy,          anchor: "start"  },
+        { axis: "C", x: cx,          y: cy + r + 24, anchor: "middle" },
+        { axis: "D", x: cx - r - 24, y: cy,          anchor: "end"    },
+      ];
+
+      return (
+        <svg viewBox="0 0 360 260" width="100%" style={{ maxWidth: 320, display: "block", margin: "0 auto" }}>
+          {/* グリッド */}
+          {[0.25, 0.5, 0.75, 1.0].map(lv => (
+            <polygon key={lv}
+              points={toPoly(DIR.map(d => pt(d.dx, d.dy, MAX * lv, MAX)))}
+              fill="none" stroke={C.border} strokeWidth="1" />
+          ))}
+          {/* 軸線 */}
+          {DIR.map(d => {
+            const [x2, y2] = pt(d.dx, d.dy, MAX, MAX);
+            return <line key={d.axis} x1={cx} y1={cy} x2={x2} y2={y2} stroke={C.border} strokeWidth="1" />;
+          })}
+          {/* ベースライン（破線） */}
+          <path d={toPath(basePts)} fill={C.accentSoft + "18"} stroke={C.accentSoft}
+            strokeWidth="1.5" strokeDasharray="4 3" />
+          {/* ユーザースコア */}
+          <path d={toPath(userPts)} fill={C.accent + "28"} stroke={C.accent} strokeWidth="2" />
+          {userPts.map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r="4.5" fill={C.accent} />
+          ))}
+          {/* ラベル */}
+          {LABEL_POS.map(l => {
+            const ax = AXES.find(a => a.id === l.axis);
+            return (
+              <text key={l.axis} x={l.x} y={l.y}
+                textAnchor={l.anchor} dominantBaseline="middle"
+                style={{ fontSize: 11, fill: C.textSub, fontFamily: "'Noto Sans JP', sans-serif" }}>
+                {ax.short}
+              </text>
+            );
+          })}
+        </svg>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 共通コンポーネント
+    // ═══════════════════════════════════════════════════════════════
+
+    function TopBar() {
+      return (
+        <div style={{ background: C.bgCream, borderBottom: `1px solid ${C.border}`, padding: "14px 20px" }}>
+          <span style={{
+            fontFamily: "'Noto Serif JP', serif", fontSize: 14,
+            color: C.accentDeep, fontWeight: 700, letterSpacing: "0.1em",
+          }}>
+            ONE PLANET
+          </span>
+        </div>
+      );
+    }
+
+    function ProgressBar({ current, total }) {
+      return (
+        <div style={{ padding: "14px 20px 0" }}>
+          <div style={{ height: 3, background: C.border, borderRadius: 2 }}>
+            <div style={{
+              height: "100%",
+              width: `${(current / total) * 100}%`,
+              borderRadius: 2,
+              background: `linear-gradient(90deg, ${C.accentSoft}, ${C.accent})`,
+              transition: "width 0.4s ease",
+            }} />
+          </div>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 画面: スタート
+    // ═══════════════════════════════════════════════════════════════
+
+    function StartScreen({ onStart }) {
+      return (
+        <div style={{ padding: "40px 20px 32px" }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <p style={{ fontSize: 11, letterSpacing: 3, color: C.accent, marginBottom: 16, fontWeight: 500 }}>
+              CONDITION CHECK
+            </p>
+            <h1 style={{
+              fontFamily: "'Noto Serif JP', serif", fontSize: 22,
+              color: C.textMain, lineHeight: 1.8, marginBottom: 14,
+            }}>
+              後継者の<br />コンディション診断
+            </h1>
+            <p style={{ fontSize: 14, color: C.textSub, lineHeight: 2 }}>
+              経営者としての<em style={{ fontStyle: "normal", color: C.accent }}>今の状態</em>を、<br />
+              4つの視点から見ていきます。
+            </p>
+          </div>
+
+          {/* スペック */}
+          <div style={{
+            display: "flex", justifyContent: "center", gap: 24,
+            padding: "18px", background: C.bgCream, borderRadius: 12,
+            marginBottom: 24, border: `1px solid ${C.border}`,
+          }}>
+            {[["16問", "質問数"], ["約3分", "所要時間"], ["無料", "費用"]].map(([val, lbl]) => (
+              <div key={lbl} style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "'Noto Serif JP', serif", fontSize: 20, fontWeight: 700, color: C.textMain }}>{val}</div>
+                <div style={{ fontSize: 11, color: C.textLight, marginTop: 2 }}>{lbl}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* メッセージ */}
+          <div style={{
+            background: C.bgWhite, borderRadius: 12, padding: "20px",
+            marginBottom: 24, border: `1px solid ${C.border}`,
+            borderLeft: `3px solid ${C.accentSoft}`,
+          }}>
+            <p style={{ fontSize: 14, color: C.textSub, lineHeight: 2, margin: 0 }}>
+              正解・不正解はありません。<br />直感で選んでください。
+            </p>
+          </div>
+
+          <button onClick={onStart} style={{
+            width: "100%", padding: "16px", borderRadius: 60,
+            border: "none", background: C.accent, color: "#fff",
+            fontSize: 15, fontWeight: 600, cursor: "pointer",
+            boxShadow: `0 4px 20px ${C.accent}40`, letterSpacing: "0.05em",
+            transition: "all 0.2s",
+          }}>
+            診断をはじめる
+          </button>
+
+          {/* 免責 */}
+          <p style={{ fontSize: 11, color: C.textLight, textAlign: "center", marginTop: 20, lineHeight: 1.9 }}>
+            この診断は、経営者としてのあなたの「今の状態」を<br />
+            考えてほしいとして作成されたものです。<br />
+            医学的・心理学的な診断や評価を目的とするものではありません。
+          </p>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 画面: 質問
+    // ═══════════════════════════════════════════════════════════════
+
+    function QuizScreen({ answers, onAnswer, onBack }) {
+      const answeredCount = Object.keys(answers).length;
+      const currentQ = QUESTIONS.find(q => answers[q.id] === undefined);
+      if (!currentQ) return null;
+
+      const axInfo = AXES.find(a => a.id === currentQ.axis);
+
+      return (
+        <div style={{ padding: "0 0 32px" }}>
+          <ProgressBar current={answeredCount} total={QUESTIONS.length} />
+          <div style={{ padding: "16px 20px 0" }}>
+
+            {/* 軸バッジ */}
+            <div style={{ marginBottom: 12 }}>
+              <span style={{
+                display: "inline-block", fontSize: 11, color: C.accent,
+                background: C.bgCream, border: `1px solid ${C.accentSoft}`,
+                borderRadius: 20, padding: "3px 12px", fontWeight: 500,
+              }}>
+                {axInfo.label}
+              </span>
+            </div>
+
+            {/* 質問カード */}
+            <div style={{
+              background: C.bgWhite, borderRadius: 16, padding: "24px 20px 20px",
+              boxShadow: `0 2px 16px rgba(58,50,38,0.08)`, border: `1px solid ${C.border}`,
+            }}>
+              <div style={{ display: "flex", gap: 10, marginBottom: 20, alignItems: "flex-start" }}>
+                <span style={{
+                  background: C.accent, color: "#fff",
+                  minWidth: 26, height: 26, borderRadius: 8,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontWeight: 700, flexShrink: 0,
+                }}>
+                  {answeredCount + 1}
+                </span>
+                <p style={{
+                  margin: 0, fontSize: 16, color: C.textMain,
+                  lineHeight: 1.8, fontFamily: "'Noto Serif JP', serif",
+                }}>
+                  {currentQ.text}
+                </p>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {OPTIONS.map(opt => (
+                  <button key={opt.value} onClick={() => onAnswer(currentQ.id, opt.value)} style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    padding: "12px 16px", borderRadius: 10,
+                    border: `1.5px solid ${C.border}`,
+                    background: C.bgWarm, cursor: "pointer", textAlign: "left",
+                  }}>
+                    <span style={{
+                      width: 18, height: 18, borderRadius: "50%",
+                      border: `2px solid ${C.accentSoft}`, flexShrink: 0,
+                    }} />
+                    <span style={{ fontSize: 14, color: C.textSub }}>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 戻るボタン */}
+            {answeredCount > 0 && (
+              <button onClick={onBack} style={{
+                marginTop: 16, padding: "8px 16px",
+                border: `1px solid ${C.border}`, borderRadius: 8,
+                background: "transparent", color: C.textLight,
+                fontSize: 13, cursor: "pointer",
+              }}>
+                ← 戻る
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 画面: 自由記述
+    // ═══════════════════════════════════════════════════════════════
+
+    function FreeTextScreen({ onNext, onSkip }) {
+      const [text, setText] = useState("");
+
+      return (
+        <div style={{ padding: "32px 20px" }}>
+          <div style={{
+            background: C.bgWhite, borderRadius: 16, padding: "28px 20px",
+            border: `1px solid ${C.border}`, boxShadow: `0 2px 16px rgba(58,50,38,0.08)`,
+          }}>
+            <p style={{ fontSize: 11, color: C.accent, letterSpacing: 2, marginBottom: 12, fontWeight: 500 }}>
+              最後に
+            </p>
+            <p style={{
+              fontFamily: "'Noto Serif JP', serif", fontSize: 16,
+              color: C.textMain, lineHeight: 1.8, marginBottom: 20,
+            }}>
+              今、一番気になっていることを<br />一言で書いてください。
+            </p>
+            <textarea
+              value={text}
+              onChange={e => setText(e.target.value)}
+              placeholder="例：先代との関係、社員のモチベーション、自分の将来..."
+              rows={3}
+              style={{
+                width: "100%", padding: "12px 14px", borderRadius: 10,
+                border: `1.5px solid ${C.border}`, background: C.bgWarm,
+                fontSize: 14, color: C.textMain, lineHeight: 1.8,
+                resize: "none", outline: "none", boxSizing: "border-box",
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
+            <button onClick={() => onNext(text)} style={{
+              width: "100%", padding: "15px", borderRadius: 60,
+              border: "none", background: C.accent, color: "#fff",
+              fontSize: 15, fontWeight: 600, cursor: "pointer",
+              boxShadow: `0 4px 16px ${C.accent}40`,
+            }}>
+              結果を見る
+            </button>
+            <button onClick={onSkip} style={{
+              width: "100%", padding: "12px", borderRadius: 60,
+              border: `1px solid ${C.border}`, background: "transparent",
+              color: C.textLight, fontSize: 13, cursor: "pointer",
+            }}>
+              スキップして結果を見る
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // 画面: 結果
+    // ═══════════════════════════════════════════════════════════════
+
+    function ResultScreen({ answers, freeText, onRestart }) {
+      const [emailUnlocked, setEmailUnlocked] = React.useState(false);
+      const [emailValue, setEmailValue]       = React.useState("");
+      const [submitting, setSubmitting]       = React.useState(false);
+      const [aiSuggestions, setAiSuggestions] = React.useState([]);
+
+      const axisScores = calcAxisScores(answers);
+      const total      = calcTotal(answers);
+      const stage      = getStage(total);
+      const topAxis    = getTopAxis(axisScores);
+
+      async function handleEmailSubmit(e) {
+        e.preventDefault();
+        if (!emailValue.trim()) return;
+        setSubmitting(true);
+        try {
+          if (WORKER_URL) {
+            const res = await fetch(WORKER_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: emailValue.trim(),
+                stage: stage.id,
+                topAxis: topAxis.id,
+                axisScores,
+                total,
+                freeText,
+              }),
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.suggestions && data.suggestions.length >= 3) {
+                setAiSuggestions(data.suggestions);
+              }
+            }
+          }
+        } catch (_) {}
+        setEmailUnlocked(true);
+        setSubmitting(false);
+      }
+
+      return (
+        <div style={{ padding: "20px 20px 40px" }}>
+
+          {/* ── [ゲート前] ステージ判定 ── */}
+          <div style={{
+            background: C.bgCream, borderRadius: 16, padding: "28px 20px",
+            textAlign: "center", border: `1px solid ${C.border}`, marginBottom: 16,
+          }}>
+            <p style={{ fontSize: 11, letterSpacing: 3, color: stage.color, marginBottom: 8, fontWeight: 500 }}>
+              診断結果
+            </p>
+            <p style={{ fontSize: 12, color: C.textLight, marginBottom: 6 }}>あなたは今</p>
+            <h2 style={{
+              fontFamily: "'Noto Serif JP', serif", fontSize: 24,
+              color: stage.color, marginBottom: 10, fontWeight: 700,
+            }}>
+              ステージ{stage.id}「{stage.name}」
+            </h2>
+            <p style={{ fontSize: 14, color: C.textSub, lineHeight: 1.9, marginBottom: 16 }}>
+              {stage.message}
+            </p>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 4 }}>
+              <span style={{
+                fontFamily: "'Noto Serif JP', serif", fontSize: 52,
+                fontWeight: 700, color: stage.color, lineHeight: 1,
+              }}>{total}</span>
+              <span style={{ fontSize: 16, color: C.textLight }}>/80</span>
+            </div>
+            <p style={{ fontSize: 13, color: C.textSub, marginTop: 12, lineHeight: 1.8 }}>
+              {stage.sub}
+            </p>
+          </div>
+
+          {/* ── [ゲート前] レーダーチャート ── */}
+          <div style={{
+            background: C.bgWhite, borderRadius: 16, padding: "24px 16px",
+            border: `1px solid ${C.border}`, marginBottom: 16,
+          }}>
+            <p style={{ fontSize: 12, color: C.textSub, textAlign: "center", marginBottom: 12 }}>
+              4つの軸のスコア
+            </p>
+            <RadarChart axisScores={axisScores} />
+
+            {/* 凡例 */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 10 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <svg width="20" height="3"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke={C.accent} strokeWidth="2" /></svg>
+                <span style={{ fontSize: 11, color: C.textSub }}>あなた</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <svg width="20" height="3"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke={C.accentSoft} strokeWidth="1.5" strokeDasharray="4 3" /></svg>
+                <span style={{ fontSize: 11, color: C.textSub }}>同じ立場の平均</span>
+              </div>
+            </div>
+
+            {/* 軸スコアバー */}
+            <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+              {AXES.map(ax => {
+                const score   = axisScores[ax.id];
+                const isTop   = ax.id === topAxis.id;
+                return (
+                  <div key={ax.id}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                      <span style={{ fontSize: 12, color: C.textSub }}>{ax.label}</span>
+                      <span style={{ fontSize: 12, color: isTop ? stage.color : C.textLight, fontWeight: isTop ? 700 : 400 }}>
+                        {score}<span style={{ fontSize: 10, color: C.textLight }}>/20</span>
+                        {isTop && <span style={{ fontSize: 10, color: stage.color, marginLeft: 4 }}>▲最高</span>}
+                      </span>
+                    </div>
+                    <div style={{ height: 5, background: C.border, borderRadius: 3 }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${(score / 20) * 100}%`,
+                        borderRadius: 3,
+                        background: isTop ? stage.color : C.accentSoft,
+                        transition: "width 0.6s ease",
+                      }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── [ゲート前] 特徴コメント ── */}
+          <div style={{
+            background: C.bgWhite, borderRadius: 16, padding: "20px",
+            border: `1px solid ${C.border}`, borderLeft: `3px solid ${stage.color}`,
+            marginBottom: 16,
+          }}>
+            <p style={{ fontSize: 12, color: stage.color, fontWeight: 600, marginBottom: 8 }}>
+              あなたの特徴
+            </p>
+            <p style={{
+              fontFamily: "'Noto Serif JP', serif", fontSize: 15,
+              color: C.textMain, lineHeight: 1.9, margin: 0,
+            }}>
+              特に<strong>「{topAxis.label}」</strong>のスコアが高い傾向にあります。<br />
+              {TOP_AXIS_COMMENTS[topAxis.id]}
+            </p>
+          </div>
+
+          {/* ── [ゲート前] 比較コメント ── */}
+          <div style={{
+            background: C.bgCream, borderRadius: 12, padding: "16px 18px",
+            border: `1px solid ${C.border}`, marginBottom: 24,
+          }}>
+            <p style={{ fontSize: 11, color: C.textLight, marginBottom: 6 }}>
+              同じ立場の後継者と比べると
+            </p>
+            <p style={{ fontSize: 14, color: C.textSub, lineHeight: 1.9, margin: 0 }}>
+              「{topAxis.label}」のスコアが平均（{BASELINE[topAxis.id]}/20）より
+              <strong>{axisScores[topAxis.id] >= BASELINE[topAxis.id] ? "高い" : "低い"}</strong>傾向です。
+              {axisScores[topAxis.id] >= BASELINE[topAxis.id]
+                ? `「${topAxis.short}」に関して、具体的に気になっていることがあるかもしれません。`
+                : `この軸は比較的安定しているようです。`}
+            </p>
+          </div>
+
+          {/* ── メアドゲート ── */}
+          {!emailUnlocked ? (
+            <div style={{
+              background: C.bgWhite, borderRadius: 16, padding: "28px 20px",
+              border: `2px solid ${C.accent}`, marginBottom: 16,
+              boxShadow: `0 4px 24px rgba(184,120,78,0.12)`,
+            }}>
+              <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 12, textAlign: "center" }}>
+                あなたへの3つの提案
+              </p>
+              <p style={{
+                fontFamily: "'Noto Serif JP', serif", fontSize: 16,
+                color: C.textMain, lineHeight: 1.9, marginBottom: 6, textAlign: "center",
+              }}>
+                スコアをもとにした具体的な視点を<br />メールでお届けします。
+              </p>
+              <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.8, marginBottom: 24, textAlign: "center" }}>
+                あなたのステージに合ったnote記事もご案内します。
+              </p>
+              <form onSubmit={handleEmailSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                <input
+                  type="email"
+                  placeholder="メールアドレスを入力"
+                  value={emailValue}
+                  onChange={e => setEmailValue(e.target.value)}
+                  required
+                  style={{
+                    width: "100%", padding: "14px 16px", borderRadius: 10,
+                    border: `1.5px solid ${C.border}`, background: C.bgWarm,
+                    fontSize: 15, color: C.textMain, boxSizing: "border-box",
+                    outline: "none",
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  style={{
+                    width: "100%", padding: "16px", borderRadius: 60,
+                    background: submitting ? C.accentSoft : C.accent,
+                    color: "#fff", fontSize: 15, fontWeight: 600,
+                    border: "none", cursor: submitting ? "default" : "pointer",
+                    letterSpacing: "0.05em",
+                    boxShadow: submitting ? "none" : `0 4px 16px ${C.accent}50`,
+                  }}
+                >
+                  {submitting ? "提案を作成しています…" : "提案を受け取る →"}
+                </button>
+                {submitting && (
+                  <p style={{ fontSize: 12, color: C.textLight, textAlign: "center", marginTop: 10, lineHeight: 1.8 }}>
+                    あなたのスコアをもとに、AIが提案を生成しています。<br />
+                    少々お待ちください。
+                  </p>
+                )}
+              </form>
+              <p style={{ fontSize: 11, color: C.textLight, marginTop: 12, lineHeight: 1.8, textAlign: "center" }}>
+                ご入力いただいたメールアドレスは、提案の送付のみに使用します。
+              </p>
+            </div>
+          ) : (
+            <>
+              {/* ── [ゲート後] 3つの提案（AI生成 or 静的フォールバック） ── */}
+              <div style={{
+                background: C.bgWhite, borderRadius: 16, padding: "24px 20px",
+                border: `1px solid ${C.border}`, marginBottom: 16,
+                boxShadow: `0 2px 16px rgba(58,50,38,0.08)`,
+              }}>
+                <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 8 }}>
+                  あなたへの提案
+                </p>
+                <p style={{
+                  fontFamily: "'Noto Serif JP', serif", fontSize: 15,
+                  color: C.textMain, lineHeight: 1.8, marginBottom: 16,
+                }}>
+                  {aiSuggestions.length > 0
+                    ? "あなたのスコアと状態をもとに、AIがまとめた3つの視点です。"
+                    : "スコアをもとに、今のあなたに合った3つの視点をまとめました。"}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {(aiSuggestions.length > 0 ? aiSuggestions : SUGGESTIONS[topAxis.id]).map((s, i) => (
+                    <div key={i} style={{
+                      display: "flex", gap: 12, alignItems: "flex-start",
+                      padding: "14px 16px", borderRadius: 12,
+                      background: C.bgCream, border: `1px solid ${C.border}`,
+                    }}>
+                      <span style={{
+                        minWidth: 22, height: 22, borderRadius: "50%",
+                        background: C.accent, color: "#fff",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 11, fontWeight: 700, flexShrink: 0, marginTop: 1,
+                      }}>{i + 1}</span>
+                      <p style={{ margin: 0, fontSize: 14, color: C.textSub, lineHeight: 1.9 }}>{s}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* ── [ゲート後] おすすめnote記事 ── */}
+              {NOTE_ARTICLES[stage.id] && NOTE_ARTICLES[stage.id].url !== "#" && (
+                <div style={{
+                  background: C.bgCream, borderRadius: 12, padding: "16px 18px",
+                  border: `1px solid ${C.border}`, marginBottom: 16,
+                }}>
+                  <p style={{ fontSize: 11, color: C.textLight, marginBottom: 8 }}>
+                    あなたのステージに合ったnote記事
+                  </p>
+                  <a
+                    href={NOTE_ARTICLES[stage.id].url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ fontSize: 14, color: C.accent, fontWeight: 600, textDecoration: "underline", lineHeight: 1.8 }}
+                  >
+                    {NOTE_ARTICLES[stage.id].title}
+                  </a>
+                </div>
+              )}
+
+              {/* ── [ゲート後] PDFダウンロード ── */}
+              <div className="no-print" style={{ marginBottom: 16 }}>
+                <button
+                  onClick={() => window.print()}
+                  style={{
+                    width: "100%", padding: "14px", borderRadius: 60,
+                    border: `1.5px solid ${C.accent}`, background: C.bgWhite,
+                    color: C.accent, fontSize: 14, fontWeight: 600,
+                    cursor: "pointer", letterSpacing: "0.03em",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                  }}
+                >
+                  <span>↓</span> 結果をPDFで保存する
+                </button>
+                <p style={{ fontSize: 11, color: C.textLight, textAlign: "center", marginTop: 8 }}>
+                  ブラウザの印刷メニューから「PDFに保存」を選んでください
+                </p>
+              </div>
+
+              {/* ── [ゲート後] CTA ── */}
+              <div className="no-print" style={{
+                background: C.textMain, borderRadius: 16, padding: "28px 20px",
+                textAlign: "center", marginBottom: 16,
+              }}>
+                <p style={{
+                  fontFamily: "'Noto Serif JP', serif", fontSize: 15,
+                  color: "#F5EDE0", lineHeight: 2, marginBottom: 20,
+                }}>
+                  一人で考えるのは、<br />もうやめにしませんか。
+                </p>
+                <a
+                  href="#"
+                  style={{
+                    display: "block", padding: "14px", borderRadius: 60,
+                    background: C.accent, color: "#fff",
+                    fontSize: 15, fontWeight: 600, textDecoration: "none",
+                    boxShadow: `0 4px 16px ${C.accent}50`,
+                  }}
+                >
+                  無料相談に申し込む
+                </a>
+                <p style={{ fontSize: 11, color: "#9B8E7E", marginTop: 12, lineHeight: 1.8 }}>
+                  ※ Zoom または対面。日程は個別調整します。<br />
+                  ※ 相談後の営業は一切しません。
+                </p>
+              </div>
+            </>
+          )}
+
+          {/* ── 免責フッター ── */}
+          <div style={{
+            background: C.bgCream, borderRadius: 12, padding: "16px",
+            border: `1px solid ${C.border}`, marginBottom: 16,
+          }}>
+            <p style={{ fontSize: 11, color: C.textLight, lineHeight: 1.9, margin: 0 }}>
+              <strong style={{ color: C.textSub }}>ご利用にあたって</strong><br />
+              本診断は株式会社ONE PLANETが独自に作成したセルフチェックツールです。医療機関による診断・心理検査またはそれらに代わるものではありません。診断結果はあくまで参考情報としてご活用ください。心身の不調が続く場合は、専門の医療機関にご相談されることをおすすめします。
+            </p>
+          </div>
+
+          <button className="no-print" onClick={onRestart} style={{
+            width: "100%", padding: "10px",
+            border: `1px solid ${C.border}`, borderRadius: 10,
+            background: "transparent", color: C.textLight,
+            fontSize: 13, cursor: "pointer",
+          }}>
+            もう一度診断する
+          </button>
+        </div>
+      );
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // メインアプリ
+    // ═══════════════════════════════════════════════════════════════
+
+    function App() {
+      const [screen,   setScreen]   = useState("start"); // start | quiz | freetext | result
+      const [answers,  setAnswers]  = useState({});
+      const [history,  setHistory]  = useState([]);
+      const [freeText, setFreeText] = useState("");
+
+      function handleStart() {
+        setScreen("quiz");
+        setAnswers({});
+        setHistory([]);
+        setFreeText("");
+      }
+
+      function handleAnswer(qId, val) {
+        const newAnswers = { ...answers, [qId]: val };
+        setAnswers(newAnswers);
+        setHistory(prev => [...prev.filter(id => id !== qId), qId]);
+
+        setTimeout(() => {
+          if (Object.keys(newAnswers).length === QUESTIONS.length) {
+            setScreen("freetext");
+          }
+        }, 350);
+      }
+
+      function handleBack() {
+        if (history.length === 0) return;
+        const lastQId = history[history.length - 1];
+        setAnswers(prev => { const n = { ...prev }; delete n[lastQId]; return n; });
+        setHistory(prev => prev.slice(0, -1));
+      }
+
+      function handleFreeTextNext(text) {
+        setFreeText(text);
+        setScreen("result");
+      }
+
+      function handleRestart() {
+        setScreen("start");
+        setAnswers({});
+        setHistory([]);
+        setFreeText("");
+      }
+
+      return (
+        <div style={{ maxWidth: 480, margin: "0 auto", minHeight: "100vh", background: C.bgWarm }}>
+          <TopBar />
+          {screen === "start"    && <StartScreen onStart={handleStart} />}
+          {screen === "quiz"     && <QuizScreen answers={answers} onAnswer={handleAnswer} onBack={handleBack} />}
+          {screen === "freetext" && <FreeTextScreen onNext={handleFreeTextNext} onSkip={() => handleFreeTextNext("")} />}
+          {screen === "result"   && <ResultScreen answers={answers} freeText={freeText} onRestart={handleRestart} />}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>

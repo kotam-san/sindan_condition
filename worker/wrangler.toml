@@ -1,0 +1,7 @@
+name = "sindan-condition-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# シークレットは以下のコマンドで設定する（wrangler.tomlには書かない）
+# wrangler secret put ANTHROPIC_API_KEY
+# wrangler secret put MAILER_API_KEY   （メール配信サービスのAPIキー。未使用なら不要）
