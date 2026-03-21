@@ -518,13 +518,19 @@
             );
           }
           if (GAS_URL) {
+            const params = new URLSearchParams({
+              email: payload.email,
+              stage: payload.stage,
+              scoreA: payload.axisScores.A,
+              scoreB: payload.axisScores.B,
+              scoreC: payload.axisScores.C,
+              scoreD: payload.axisScores.D,
+              total: payload.total,
+              freeText: payload.freeText || "",
+            });
             requests.push(
-              fetch(GAS_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "text/plain" },
-                body: JSON.stringify(payload),
-              }).catch(() => null)
+              fetch(`${GAS_URL}?${params.toString()}`, { mode: "no-cors" })
+                .catch(() => null)
             );
           }
           const [workerData] = await Promise.all(requests);
