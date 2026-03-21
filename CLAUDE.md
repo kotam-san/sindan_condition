@@ -317,8 +317,8 @@ wrangler deploy                          # Workers にデプロイ
 
 1. ~~Cloudflare PagesデプロイとWorkerデプロイ~~ ✅ 完了
 2. ~~GASリード記録~~ ✅ 完了
-3. **CTAリンクを差し替え**（結果画面の `href="#"` を無料相談ページのURLに変更）
-4. **LP-Cの本番実装**（v3のHTMLをSquarespaceに移植または独立ページとして公開）
-5. **note記事①の執筆・公開**（記事末尾CTAに診断ツールのURLを設置）＋ `NOTE_ARTICLES` の設定
-6. **プライバシーポリシーの更新**（CLAUDE.md内の文案を反映。メアド取得の記述を追加）
+3. ~~CTAリンクを差し替え~~ ✅ 完了（https://www.1planet.jp/contact）
+4. ~~プライバシーポリシーの更新~~ ✅ 完了済み（別コンテンツ作成時に対応済み）
+5. **Squarespace埋め込み**（iframeまたはリダイレクトで診断ツールをサイトに設置）
+6. **note記事①の執筆・公開**（記事末尾CTAに診断ツールのURLを設置）＋ `NOTE_ARTICLES` の設定
 7. **平均スコアの実データ差し替え**（100件回答後に `BASELINE` 定数を更新）
