@@ -141,6 +141,9 @@
     // Cloudflare Worker のURL（デプロイ後に設定する。空文字の場合はAI提案スキップ→静的テキストで表示）
     const WORKER_URL = "";
 
+    // Google Apps Script のURL（リード情報をスプレッドシートに記録）
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxNUPMBCWkGzInu-lsRxS0lO4NcPmhExR1yIw7M3Uy6s9_inelCH4usYALzSFesnw2E/exec";
+
     // ステージ別おすすめnote記事（記事公開後にURLとタイトルを設定する）
     const NOTE_ARTICLES = {
       1: { title: "（ステージ1向けnote記事タイトル）", url: "#" },
@@ -495,26 +498,37 @@
         e.preventDefault();
         if (!emailValue.trim()) return;
         setSubmitting(true);
+        const payload = {
+          email: emailValue.trim(),
+          stage: stage.id,
+          topAxis: topAxis.id,
+          axisScores,
+          total,
+          freeText,
+        };
         try {
+          const requests = [];
           if (WORKER_URL) {
-            const res = await fetch(WORKER_URL, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                email: emailValue.trim(),
-                stage: stage.id,
-                topAxis: topAxis.id,
-                axisScores,
-                total,
-                freeText,
-              }),
-            });
-            if (res.ok) {
-              const data = await res.json();
-              if (data.suggestions && data.suggestions.length >= 3) {
-                setAiSuggestions(data.suggestions);
-              }
-            }
+            requests.push(
+              fetch(WORKER_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              }).then(res => res.ok ? res.json() : null)
+            );
+          }
+          if (GAS_URL) {
+            requests.push(
+              fetch(GAS_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              }).catch(() => null)
+            );
+          }
+          const [workerData] = await Promise.all(requests);
+          if (workerData && workerData.suggestions && workerData.suggestions.length >= 3) {
+            setAiSuggestions(workerData.suggestions);
           }
         } catch (_) {}
         setEmailUnlocked(true);
