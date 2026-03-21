@@ -62,7 +62,7 @@
 
     // 出題順はCLAUDE.mdの仕様通り（軸シャッフル済み）
     const QUESTIONS = [
-      { id: "A1", axis: "A", text: "経営者の集まりや前任の社長と会った後、自分との差に落ち込むことがある" },
+      { id: "A1", axis: "A", text: "経営者の集まりや同業の社長と会った後、自分との差に落ち込むことがある" },
       { id: "B1", axis: "B", text: "不満だと思っても関係性を壊さないように飲み込むことが多い" },
       { id: "C1", axis: "C", text: "経営の本音を話せる相手が、社内にも社外にもほとんどいない" },
       { id: "D1", axis: "D", text: "以前はあった仕事へのワクワクは消えていると感じる" },
@@ -270,16 +270,19 @@
 
     function ProgressBar({ current, total }) {
       return (
-        <div style={{ padding: "14px 20px 0" }}>
-          <div style={{ height: 3, background: C.border, borderRadius: 2 }}>
+        <div style={{ padding: "14px 20px 6px" }}>
+          <div style={{ height: 5, background: C.border, borderRadius: 3 }}>
             <div style={{
               height: "100%",
               width: `${(current / total) * 100}%`,
-              borderRadius: 2,
+              borderRadius: 3,
               background: `linear-gradient(90deg, ${C.accentSoft}, ${C.accent})`,
               transition: "width 0.4s ease",
             }} />
           </div>
+          <p style={{ fontSize: 11, color: C.textLight, textAlign: "right", marginTop: 4 }}>
+            {current} / {total}
+          </p>
         </div>
       );
     }
@@ -321,6 +324,11 @@
             ))}
           </div>
 
+          {/* 比較訴求 */}
+          <p style={{ fontSize: 12, color: C.textLight, textAlign: "center", marginBottom: 20, marginTop: -8 }}>
+            ※ 同じ立場の後継者との比較結果もお伝えします
+          </p>
+
           {/* メッセージ */}
           <div style={{
             background: C.bgWhite, borderRadius: 12, padding: "20px",
@@ -361,23 +369,10 @@
       const currentQ = QUESTIONS.find(q => answers[q.id] === undefined);
       if (!currentQ) return null;
 
-      const axInfo = AXES.find(a => a.id === currentQ.axis);
-
       return (
         <div style={{ padding: "0 0 32px" }}>
           <ProgressBar current={answeredCount} total={QUESTIONS.length} />
           <div style={{ padding: "16px 20px 0" }}>
-
-            {/* 軸バッジ */}
-            <div style={{ marginBottom: 12 }}>
-              <span style={{
-                display: "inline-block", fontSize: 11, color: C.accent,
-                background: C.bgCream, border: `1px solid ${C.accentSoft}`,
-                borderRadius: 20, padding: "3px 12px", fontWeight: 500,
-              }}>
-                {axInfo.label}
-              </span>
-            </div>
 
             {/* 質問カード */}
             <div style={{
