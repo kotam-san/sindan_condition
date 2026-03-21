@@ -107,26 +107,39 @@
     ];
 
     // 最高スコア軸ごとの提案（3つ）
+    // 静的フォールバック（6セクション: [分析, 問い, アクション1, アクション2, アクション3, メッセージ]）
     const SUGGESTIONS = {
       A: [
-        "「比べる」をやめるのではなく、「違う」と見る。先代や他の経営者との差は、あなたが別の人間だというだけです。",
-        "あなたが自然体でいられた瞬間を3つ思い出して、紙に書き出してみてください。そこにあなた自身の強みがあります。",
-        "「こうあるべき経営者像」を、他の誰かの言葉ではなく、自分の言葉で定義し直す時間を取ってみましょう。",
+        "診断から見えるのは、あなたが「経営者としてこうあるべき」という理想像と自分自身のギャップに、日々エネルギーを使い続けているという事実です。これは弱さではなく、真剣に向き合ってきた証拠です。先代や他の経営者と自分を比べてしまうのも、それだけ誠実に役割を果たそうとしているからではないでしょうか。",
+        "もし、あなたが今のまま「正解の経営者像」を探し続けたとして、5年後のあなたはどんな表情をしていると思いますか？",
+        "「自分らしかった瞬間」を書き出す：今週、自然体でいられた・手応えを感じた瞬間を3つ、紙に書き出してみてください。そこにあなた本来の強みが隠れています。",
+        "比べる相手を変える：他の経営者ではなく、1年前の自分と今の自分を比べる習慣を作ってみましょう。成長は必ず、そこに見えてきます。",
+        "自分の言葉で再定義する：「自分らしい経営者とは？」を、誰かの言葉ではなく自分の言葉で10分間書いてみてください。答えが出なくてもいいです。",
+        "「こうあるべき」を追うのをやめると、あなた本来の強みが見えてきます。まずは、自分の言葉で語れる自分像を一緒に探してみませんか。",
       ],
       B: [
-        "「飲み込む」前に、まず紙に書いて吐き出す。誰かに見せなくていい。書くだけで少し軽くなります。",
-        "「大人の対応」をした日は、意識的に回復の時間を作る。飲み込んだ分だけ、自分に何かを補充する習慣を。",
-        "週に一度、小さな本音を誰かに話す場を持つ。「実はさ…」と言える相手を一人探すことから始めてみましょう。",
+        "診断から見えるのは、あなたが周囲との関係を守るために、感情や不満を自分の内側で処理し続けているということです。「大人の対応」の積み重ねが、静かに、しかし確実にエネルギーを奪っています。一人で飲み込み続けることに慣れてしまっているかもしれません。",
+        "もし、あなたが今飲み込んでいることを、信頼できる誰かに話したとして、その人はどんな言葉を返してくれると思いますか？",
+        "「吐き出す」時間を作る：誰にも見せない前提で、今感じていることを紙に5分間書き出してください。書くだけで、驚くほど気持ちが軽くなります。",
+        "回復の時間を予約する：「大人の対応」をした日の夜に、自分のための30分を先にスケジュールに入れてみましょう。補充なしに走り続けることはできません。",
+        "小さな本音を話す練習：今週一度、「実はちょっとしんどくて」と誰かに言ってみてください。一言でいい。それだけで、溜め込みのパターンが少しずつ変わっていきます。",
+        "溜め込むことに慣れすぎると、自分が何を感じているかわからなくなります。まずは安全な場所で、言葉にしてみることから始めてみませんか。",
       ],
       C: [
-        "「弱みを見せること」と「信頼を失うこと」は別物です。本音を話せる場が、経営者の孤独を和らげる最初の一手になります。",
-        "社外の経営者と月に1回でも会う機会を作ってみてください。立場が近いだけで、話せることが変わります。",
-        "まず一人だけ、何でも話せる人を探すことから始める。コーチでも、同業仲間でも、家族以外の誰かでも。",
+        "診断から見えるのは、あなたが経営の本音や弱みを話せる場をほとんど持てていないということです。「社長は強くあるべき」という役割の重さが、じわじわと孤独を深めているかもしれません。本音を話せないことは、決して弱さではありません。",
+        "もし、信頼できる人が隣にいて、どんなことでも話せる場があったとしたら、今一番最初に話したいことは何ですか？",
+        "社外に一人、話せる人を探す：同業でも異業種でも、立場が近い経営者と月一回話す機会を作ってみましょう。立場が近いだけで、話せることが変わります。",
+        "「弱み」と「信頼」を切り離す：弱みを話すことは信頼を失うことではないと確認するために、小さな本音を一つ、信頼できる相手に話してみてください。",
+        "壁打ち相手を作る：答えをもらうためでなく、ただ聞いてもらうだけでいい相手を一人見つけてみましょう。話すことで、考えが整理されていきます。",
+        "一人で考え続けることの限界は、誰にでも来ます。まずは「話す」という行為そのものを、自分に許してみてください。",
       ],
       D: [
-        "「やらないこと」を一つ決めて、エネルギーを守る。足し算より引き算が、今の自分には効きます。",
-        "経営者としてではなく、一人の人間として過ごす時間を意識的に作ってみてください。",
-        "将来への不安より、今日一日の小さな手応えに意識を向ける練習をしてみましょう。",
+        "診断から見えるのは、あなたが今、エネルギーの残量が少ない状態で経営を続けているということです。仕事への意欲や将来への展望が描きにくくなっているとしたら、それは能力の問題ではなく、消耗しすぎているサインです。休むことは、逃げることではありません。",
+        "もし、あなたが大切な後輩が今のあなたと全く同じ状況にいたとしたら、その人に「もっと頑張れ」と声をかけますか？",
+        "「何もしない15分」を予約する：スケジュールに意図的に空白を作り、その時間は何もしないことだけを自分に許してみてください。エネルギーを蓄える最小の習慣です。",
+        "足し算より引き算：今週、やめていいことを一つ決めてください。エネルギーは増やすより、漏れを止める方が回復は早いです。",
+        "今日の小さな手応えに目を向ける：将来への不安ではなく、今日一日で「これはできた」と思えることを寝る前に一つ書いてみましょう。小さな積み重ねが、前に進む力になります。",
+        "エネルギーが枯渇している状態では、どんな正しい判断も難しくなります。まずは、自分を回復させることを「経営の仕事」として位置づけてみませんか。",
       ],
     };
 
@@ -672,18 +685,41 @@
               border: `2px solid ${C.accent}`, marginBottom: 16,
               boxShadow: `0 4px 24px rgba(184,120,78,0.12)`,
             }}>
-              <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 12, textAlign: "center" }}>
-                あなたへの3つの提案
-              </p>
               <p style={{
-                fontFamily: "'Noto Serif JP', serif", fontSize: 16,
-                color: C.textMain, lineHeight: 1.9, marginBottom: 6, textAlign: "center",
+                fontFamily: "'Noto Serif JP', serif", fontSize: 17,
+                color: C.textMain, lineHeight: 1.8, textAlign: "center",
+                marginBottom: 20, fontWeight: 700,
               }}>
-                スコアをもとにした具体的な視点を<br />メールでお届けします。
+                あなたに合わせた<br />「AIパーソナル・ヒント」を<br />このまま無料で作成します
               </p>
-              <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.8, marginBottom: 24, textAlign: "center" }}>
-                あなたのステージに合ったnote記事もご案内します。
+
+              {/* プレビューカード */}
+              <div style={{
+                border: `1px solid ${C.border}`, borderRadius: 12,
+                padding: "16px 18px", marginBottom: 20, background: C.bgWarm,
+              }}>
+                <p style={{ fontSize: 12, color: C.accent, fontWeight: 600, marginBottom: 12 }}>
+                  ▼ この後すぐに見られる内容
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {[
+                    `「${topAxis.label}」の客観的な分析`,
+                    "現状のパターンから抜け出す「コーチからの問い」",
+                    "明日から試せる小さなアクション（3つ）",
+                  ].map((item, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                      <span style={{ fontSize: 16, lineHeight: 1.5 }}>💡</span>
+                      <p style={{ margin: 0, fontSize: 14, color: C.textSub, lineHeight: 1.6 }}>{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p style={{ fontSize: 13, color: C.textSub, lineHeight: 1.9, marginBottom: 20, textAlign: "center" }}>
+                ※生成されたヒントと解説は、後ほどメールでもお届けします。<br />
+                メールアドレスを入力して、AIヒントを作成してください。
               </p>
+
               <form onSubmit={handleEmailSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 <input
                   type="email"
@@ -692,7 +728,7 @@
                   onChange={e => setEmailValue(e.target.value)}
                   required
                   style={{
-                    width: "100%", padding: "14px 16px", borderRadius: 10,
+                    width: "100%", padding: "14px 16px", borderRadius: 60,
                     border: `1.5px solid ${C.border}`, background: C.bgWarm,
                     fontSize: 15, color: C.textMain, boxSizing: "border-box",
                     outline: "none",
@@ -710,56 +746,104 @@
                     boxShadow: submitting ? "none" : `0 4px 16px ${C.accent}50`,
                   }}
                 >
-                  {submitting ? "提案を作成しています…" : "提案を受け取る →"}
+                  {submitting ? "AIヒントを作成しています…" : "無料でヒントを見る"}
                 </button>
                 {submitting && (
-                  <p style={{ fontSize: 12, color: C.textLight, textAlign: "center", marginTop: 10, lineHeight: 1.8 }}>
-                    あなたのスコアをもとに、AIが提案を生成しています。<br />
-                    少々お待ちください。
+                  <p style={{ fontSize: 12, color: C.textLight, textAlign: "center", marginTop: 4, lineHeight: 1.8 }}>
+                    あなたのスコアをもとに、AIが分析しています。<br />少々お待ちください。
                   </p>
                 )}
               </form>
-              <p style={{ fontSize: 11, color: C.textLight, marginTop: 12, lineHeight: 1.8, textAlign: "center" }}>
-                ご入力いただいたメールアドレスは、提案の送付のみに使用します。
-              </p>
+              <div style={{ marginTop: 14, textAlign: "center" }}>
+                <p style={{ fontSize: 11, color: C.textLight, lineHeight: 1.9 }}>
+                  ※ 後継者向けの無料相談のご案内も含まれます。<br />
+                  ※ 解除はいつでも可能です。
+                </p>
+              </div>
             </div>
           ) : (
             <>
-              {/* ── [ゲート後] 3つの提案（AI生成 or 静的フォールバック） ── */}
-              <div style={{
-                background: C.bgWhite, borderRadius: 16, padding: "24px 20px",
-                border: `1px solid ${C.border}`, marginBottom: 16,
-                boxShadow: `0 2px 16px rgba(58,50,38,0.08)`,
-              }}>
-                <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 8 }}>
-                  あなたへの提案
-                </p>
-                <p style={{
-                  fontFamily: "'Noto Serif JP', serif", fontSize: 15,
-                  color: C.textMain, lineHeight: 1.8, marginBottom: 16,
-                }}>
-                  {aiSuggestions.length > 0
-                    ? "あなたのスコアと状態をもとに、AIがまとめた3つの視点です。"
-                    : "スコアをもとに、今のあなたに合った3つの視点をまとめました。"}
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {(aiSuggestions.length > 0 ? aiSuggestions : SUGGESTIONS[topAxis.id]).map((s, i) => (
-                    <div key={i} style={{
-                      display: "flex", gap: 12, alignItems: "flex-start",
-                      padding: "14px 16px", borderRadius: 12,
-                      background: C.bgCream, border: `1px solid ${C.border}`,
+              {/* ── [ゲート後] AIパーソナル・ヒント（6セクション構成） ── */}
+              {(() => {
+                const content = aiSuggestions.length >= 6 ? aiSuggestions : SUGGESTIONS[topAxis.id];
+                const [analysis, question, act1, act2, act3, message] = content;
+                const actions = [act1, act2, act3];
+                return (
+                  <>
+                    {/* 客観的分析 */}
+                    <div style={{
+                      background: C.bgWhite, borderRadius: 16, padding: "24px 20px",
+                      border: `1px solid ${C.border}`, marginBottom: 16,
+                      boxShadow: `0 2px 16px rgba(58,50,38,0.08)`,
                     }}>
-                      <span style={{
-                        minWidth: 22, height: 22, borderRadius: "50%",
-                        background: C.accent, color: "#fff",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 11, fontWeight: 700, flexShrink: 0, marginTop: 1,
-                      }}>{i + 1}</span>
-                      <p style={{ margin: 0, fontSize: 14, color: C.textSub, lineHeight: 1.9 }}>{s}</p>
+                      <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 12 }}>
+                        客観的な分析
+                      </p>
+                      <p style={{ fontSize: 14, color: C.textSub, lineHeight: 2, margin: 0 }}>{analysis}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
+
+                    {/* コーチからの問い */}
+                    <div style={{
+                      background: C.bgCream, borderRadius: 16, padding: "24px 20px",
+                      border: `1px solid ${C.border}`, borderLeft: `4px solid ${C.accent}`,
+                      marginBottom: 16,
+                    }}>
+                      <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 12 }}>
+                        コーチからの問い
+                      </p>
+                      <p style={{
+                        fontFamily: "'Noto Serif JP', serif", fontSize: 15,
+                        color: C.textMain, lineHeight: 1.9, margin: 0, fontWeight: 600,
+                      }}>{question}</p>
+                    </div>
+
+                    {/* 明日からのアクション */}
+                    <div style={{
+                      background: C.bgWhite, borderRadius: 16, padding: "24px 20px",
+                      border: `1px solid ${C.border}`, marginBottom: 16,
+                    }}>
+                      <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 16 }}>
+                        明日から試せるアクション
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                        {actions.map((act, i) => {
+                          const colonIdx = act.indexOf("：");
+                          const title = colonIdx > -1 ? act.slice(0, colonIdx) : `アクション${i + 1}`;
+                          const body  = colonIdx > -1 ? act.slice(colonIdx + 1) : act;
+                          return (
+                            <div key={i} style={{
+                              padding: "16px", borderRadius: 12,
+                              background: C.bgCream, border: `1px solid ${C.border}`,
+                            }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                                <span style={{
+                                  minWidth: 22, height: 22, borderRadius: "50%",
+                                  background: C.accent, color: "#fff",
+                                  display: "flex", alignItems: "center", justifyContent: "center",
+                                  fontSize: 11, fontWeight: 700, flexShrink: 0,
+                                }}>{i + 1}</span>
+                                <p style={{ margin: 0, fontSize: 14, color: C.textMain, fontWeight: 600, lineHeight: 1.5 }}>{title}</p>
+                              </div>
+                              <p style={{ margin: 0, fontSize: 13, color: C.textSub, lineHeight: 1.9, paddingLeft: 32 }}>{body}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 専門家メッセージ */}
+                    <div style={{
+                      background: C.bgWhite, borderRadius: 16, padding: "24px 20px",
+                      border: `1px solid ${C.border}`, marginBottom: 16,
+                    }}>
+                      <p style={{ fontSize: 11, color: C.accent, fontWeight: 600, letterSpacing: 1, marginBottom: 12 }}>
+                        専門家からのメッセージ
+                      </p>
+                      <p style={{ fontSize: 14, color: C.textSub, lineHeight: 2, margin: 0 }}>{message}</p>
+                    </div>
+                  </>
+                );
+              })()}
 
               {/* ── [ゲート後] おすすめnote記事 ── */}
               {NOTE_ARTICLES[stage.id] && NOTE_ARTICLES[stage.id].url !== "#" && (
