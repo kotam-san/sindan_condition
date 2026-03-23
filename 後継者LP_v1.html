@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会社を継いだのに、辞めたいと思ったことがある、あなたへ。| ONE PLANET</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  /*
+   * Squarespace組み込み用：スタイル干渉防止のためスコープ付き
+   * すべてのスタイルは .op-lp-wrapper の配下にのみ適用されます
+   */
+
+  .op-lp-wrapper {
+    --op-bg-warm:    #FAF6F0;
+    --op-bg-cream:   #F5EDE0;
+    --op-bg-white:   #FFFDF9;
+    --op-text-main:  #3A3226;
+    --op-text-sub:   #5A5043;
+    --op-text-light: #9B8E7E;
+    --op-accent:     #B8784E;
+    --op-accent-dark:#8B5E3C;
+    --op-accent-soft:#D4A574;
+    --op-border:     #E8DFD2;
+    --op-shadow:     0 4px 20px rgba(58, 50, 38, 0.08);
+    --op-shadow-hover: 0 8px 30px rgba(184, 120, 78, 0.25);
+
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--op-text-main);
+    background-color: var(--op-bg-warm);
+    line-height: 1.8;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .op-lp-wrapper * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .op-lp-wrapper h1,
+  .op-lp-wrapper h2,
+  .op-lp-wrapper h3 {
+    font-family: 'Noto Serif JP', serif;
+    color: var(--op-text-main);
+    line-height: 1.5;
+  }
+
+  .op-lp-wrapper img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ─── 共通レイアウト ─── */
+  .op-section {
+    padding: 80px 20px;
+  }
+
+  .op-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .op-section-label {
+    display: block;
+    color: var(--op-accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .op-section-title {
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  /* ─── CTAボタン ─── */
+  .op-cta-area {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .op-cta-btn {
+    display: inline-block;
+    background-color: var(--op-accent);
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 700;
+    padding: 20px 40px;
+    border-radius: 50px;
+    box-shadow: var(--op-shadow);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 480px;
+    letter-spacing: 0.04em;
+  }
+
+  .op-cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--op-shadow-hover);
+    background-color: var(--op-accent-dark);
+  }
+
+  .op-microcopy {
+    display: block;
+    font-size: 13px;
+    color: var(--op-text-sub);
+    margin-top: 14px;
+  }
+
+  /* ─── 1. Hero ─── */
+  .op-hero {
+    padding: 60px 20px 80px;
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--op-bg-warm) 100%);
+    text-align: center;
+  }
+
+  .op-hero-label {
+    display: inline-block;
+    border: 1px solid var(--op-accent);
+    color: var(--op-accent);
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 28px;
+    background-color: var(--op-bg-white);
+    letter-spacing: 0.06em;
+  }
+
+  .op-hero h1 {
+    font-size: clamp(26px, 6vw, 40px);
+    line-height: 1.5;
+    margin-bottom: 24px;
+    color: var(--op-text-main);
+  }
+
+  .op-hero h1 em {
+    font-style: normal;
+    color: var(--op-accent);
+  }
+
+  .op-hero-lead {
+    font-size: clamp(15px, 3.5vw, 17px);
+    color: var(--op-text-sub);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 2;
+  }
+
+  /* ─── 2. 共感（モノローグ）─── */
+  .op-monologue {
+    background-color: var(--op-bg-cream);
+  }
+
+  .op-voice-card {
+    background: var(--op-bg-white);
+    border-radius: 12px;
+    padding: 24px 24px 24px 52px;
+    margin-bottom: 16px;
+    box-shadow: var(--op-shadow);
+    border-left: 4px solid var(--op-accent);
+    position: relative;
+  }
+
+  .op-voice-card::before {
+    content: "\201C";
+    position: absolute;
+    top: 12px;
+    left: 16px;
+    font-size: 36px;
+    color: var(--op-border);
+    font-family: serif;
+    line-height: 1;
+  }
+
+  .op-voice-card p {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    color: var(--op-text-main);
+    line-height: 1.8;
+  }
+
+  .op-monologue-bridge {
+    text-align: center;
+    margin-top: 40px;
+    padding: 28px 24px;
+    background: var(--op-bg-white);
+    border-radius: 12px;
+    border: 1px solid var(--op-border);
+  }
+
+  .op-monologue-bridge p {
+    font-size: 16px;
+    color: var(--op-text-sub);
+    line-height: 2;
+  }
+
+  .op-monologue-bridge strong {
+    color: var(--op-accent);
+    display: block;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    margin-top: 12px;
+  }
+
+  /* ─── 3. 課題構造 ─── */
+  .op-reason-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  @media (min-width: 768px) {
+    .op-reason-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .op-reason-card {
+    background: var(--op-bg-white);
+    border: 1px solid var(--op-border);
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .op-reason-num {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--op-bg-cream);
+    color: var(--op-accent);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 1px solid var(--op-border);
+  }
+
+  .op-reason-card h3 {
+    font-size: 17px;
+    margin-bottom: 16px;
+  }
+
+  .op-reason-card p {
+    font-size: 14px;
+    color: var(--op-text-sub);
+    text-align: left;
+    line-height: 1.9;
+  }
+
+  /* ─── 4. リフレーミング ─── */
+  .op-reframing {
+    background-color: var(--op-text-main);
+    color: var(--op-bg-white);
+    text-align: center;
+  }
+
+  .op-reframing .op-section-label {
+    color: var(--op-accent-soft);
+  }
+
+  .op-reframing h2 {
+    color: var(--op-bg-white);
+    margin-bottom: 32px;
+  }
+
+  .op-reframing-body {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .op-reframing-body p {
+    color: #C8BFB4;
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 2;
+  }
+
+  .op-reframing-highlight {
+    margin-top: 40px;
+    padding: 28px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .op-reframing-highlight p {
+    color: #FFFDF9 !important;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px !important;
+    font-weight: 600;
+    margin-bottom: 0 !important;
+    line-height: 2 !important;
+  }
+
+  /* ─── 5. Before/After ─── */
+  .op-ba-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  @media (min-width: 768px) {
+    .op-ba-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .op-ba-card {
+    background: var(--op-bg-white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--op-shadow);
+    border: 1px solid var(--op-border);
+  }
+
+  .op-ba-header {
+    background: var(--op-bg-cream);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--op-border);
+  }
+
+  .op-ba-header span {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--op-accent-dark);
+    letter-spacing: 0.06em;
+  }
+
+  .op-ba-content {
+    padding: 24px;
+  }
+
+  .op-ba-item {
+    margin-bottom: 20px;
+  }
+
+  .op-ba-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .op-ba-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .op-ba-label.before {
+    background: #F0E8DA;
+    color: var(--op-text-sub);
+  }
+
+  .op-ba-label.after {
+    background: var(--op-accent);
+    color: #fff;
+  }
+
+  .op-ba-text {
+    font-size: 14px;
+    color: var(--op-text-sub);
+    line-height: 1.8;
+  }
+
+  /* ─── 6. プロフィール ─── */
+  .op-profile {
+    background-color: var(--op-bg-cream);
+  }
+
+  .op-profile-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .op-profile-flex {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 48px;
+    }
+  }
+
+  .op-profile-img {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 6px solid var(--op-bg-white);
+    box-shadow: var(--op-shadow);
+    margin: 0 auto;
+  }
+
+  .op-profile-text h3 {
+    color: var(--op-accent-dark);
+    font-size: 19px;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+
+  .op-profile-text p {
+    font-size: 15px;
+    margin-bottom: 16px;
+    color: var(--op-text-sub);
+    line-height: 2;
+  }
+
+  .op-profile-text p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── 7. オファー（ベネフィット）─── */
+  .op-benefits {
+    background-color: var(--op-bg-white);
+  }
+
+  .op-benefits-lead {
+    text-align: center;
+    font-size: 15px;
+    color: var(--op-text-sub);
+    margin-bottom: 40px;
+    line-height: 2;
+  }
+
+  .op-benefit-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .op-benefit-item {
+    background: var(--op-bg-warm);
+    border-radius: 12px;
+    padding: 28px 28px 28px 24px;
+    border-left: 4px solid var(--op-accent);
+  }
+
+  .op-benefit-item h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .op-benefit-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--op-accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .op-benefit-item p {
+    font-size: 15px;
+    color: var(--op-text-sub);
+    line-height: 2;
+    padding-left: 38px;
+  }
+
+  /* ─── 8. Closing CTA ─── */
+  .op-closing {
+    background: linear-gradient(135deg, var(--op-bg-warm) 0%, var(--op-bg-cream) 100%);
+    border-top: 2px solid var(--op-border);
+  }
+
+  .op-closing-box {
+    background: var(--op-bg-white);
+    border-radius: 16px;
+    padding: 36px 28px;
+    margin-bottom: 36px;
+    box-shadow: var(--op-shadow);
+    border: 1px solid var(--op-border);
+    text-align: center;
+  }
+
+  .op-closing-limit {
+    color: var(--op-accent-dark);
+    font-weight: 700;
+    margin-bottom: 28px;
+    font-size: 15px;
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .op-check-list {
+    list-style: none;
+    display: inline-block;
+    text-align: left;
+  }
+
+  .op-check-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--op-text-main);
+  }
+
+  .op-check-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--op-accent);
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .op-closing-note {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--op-text-sub);
+    font-family: 'Noto Serif JP', serif;
+    line-height: 2;
+  }
+
+  /* ─── 9. FAQ ─── */
+  .op-faq-list {
+    border-top: 1px solid var(--op-border);
+  }
+
+  .op-faq-item {
+    border-bottom: 1px solid var(--op-border);
+    padding: 28px 0;
+  }
+
+  .op-faq-q {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 14px;
+    padding-left: 32px;
+    position: relative;
+    color: var(--op-text-main);
+  }
+
+  .op-faq-q::before {
+    content: "Q";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--op-accent);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .op-faq-a {
+    font-size: 15px;
+    color: var(--op-text-sub);
+    padding-left: 32px;
+    position: relative;
+    line-height: 2;
+  }
+
+  .op-faq-a::before {
+    content: "A";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--op-text-light);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* ─── フッター ─── */
+  .op-footer {
+    background: var(--op-text-main);
+    padding: 32px 20px;
+    text-align: center;
+  }
+
+  .op-footer p {
+    font-size: 12px;
+    color: #9B8E7E;
+    line-height: 2;
+  }
+
+  .op-footer a {
+    color: #9B8E7E;
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div class="op-lp-wrapper">
+
+  <!-- ====================
+       1. Hero
+  ==================== -->
+  <section class="op-hero">
+    <div class="op-container">
+      <span class="op-hero-label">ONE PLANET ｜ 後継者専門コーチング</span>
+      <h1>
+        会社を継いだのに、<em>辞めたい</em>と<br>
+        思ったことがある、あなたへ。
+      </h1>
+      <p class="op-hero-lead">
+        それは弱さでも、向いていないわけでもありません。<br>
+        一人で抱えてきた重さを、一度言葉にしてみませんか。
+      </p>
+      <div class="op-cta-area">
+        <a href="https://www.1planet.jp/contact" class="op-cta-btn">
+          【無料】60分 相談を申し込む
+        </a>
+        <span class="op-microcopy">毎月3名様限定 ／ 秘密厳守 ／ 強引な勧誘・営業は一切なし</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       2. 共感（モノローグ）
+  ==================== -->
+  <section class="op-section op-monologue">
+    <div class="op-container">
+      <span class="op-section-label">こんなことを考えたことはありませんか？</span>
+
+      <div class="op-voice-card">
+        <p>数字は悪くないのに、なぜこんなに毎日がつらいのだろう。</p>
+      </div>
+      <div class="op-voice-card">
+        <p>このまま60歳まで、ずっとこのプレッシャーを背負い続けるのか。</p>
+      </div>
+      <div class="op-voice-card">
+        <p>先代みたいにガツガツできない自分は、経営者に向いていないのかな。</p>
+      </div>
+      <div class="op-voice-card">
+        <p>「俺、ほんと頑張ってるよね」って、誰かに言ってほしい。</p>
+      </div>
+
+      <div class="op-monologue-bridge">
+        <p>当てはまるものはありましたか？<br>それは、あなたが弱いのではありません。</p>
+        <strong>後継者として、その重さを一人で背負ってきた証拠です。</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       3. 課題構造
+  ==================== -->
+  <section class="op-section">
+    <div class="op-container">
+      <h2 class="op-section-title">後継者が辞めたいと思う、<br>本当の理由</h2>
+
+      <div class="op-reason-grid">
+        <div class="op-reason-card">
+          <div class="op-reason-num">1</div>
+          <h3>「こうあるべき」<br>という呪縛</h3>
+          <p>先代のように強く出せない自分を責め、「自分には向いていないのでは」という自己否定が積み重なります。でも、別の誰かのコピーになる必要はありません。</p>
+        </div>
+        <div class="op-reason-card">
+          <div class="op-reason-num">2</div>
+          <h3>波風を立てない<br>という我慢</h3>
+          <p>不満を飲み込み、「大人の対応」を続ける。その優しさが、言いたいことを言えない空気を作り、気づかないうちに自分を追い詰める構造になっています。</p>
+        </div>
+        <div class="op-reason-card">
+          <div class="op-reason-num">3</div>
+          <h3>「本音」を言えない<br>という孤独</h3>
+          <p>社員にも、親にも、同業仲間にも弱音を吐けない。承継後3年以内に約7割が強いストレスを経験するといわれ、その最大の要因がこの孤独感です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       4. リフレーミング
+  ==================== -->
+  <section class="op-section op-reframing">
+    <div class="op-container">
+      <span class="op-section-label">視点の転換</span>
+      <h2 class="op-section-title">「辞めたい」は、弱さじゃない。<br>このままでは続けられない、<br>というSOSです。</h2>
+
+      <div class="op-reframing-body">
+        <p>辞めたいと思うのは、あなたが弱いからではありません。<br>続けてきた後の「構造」が、あなたを疲弊させているだけです。</p>
+        <p>「辞めたい」の裏には、「今の条件のままでは続けられない」というメッセージが隠れています。</p>
+
+        <div class="op-reframing-highlight">
+          <p>
+            必要なのは、辞め続けるための覚悟ではなく、<br>
+            まず自分が何に苦しんでいるのかを、言葉にすることです。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       5. Before/After 事例
+  ==================== -->
+  <section class="op-section">
+    <div class="op-container">
+      <span class="op-section-label">ご相談事例</span>
+      <h2 class="op-section-title">ご相談者様の声・変化</h2>
+
+      <div class="op-ba-grid">
+        <div class="op-ba-card">
+          <div class="op-ba-header">
+            <span>製造業 ／ 30代 後継者</span>
+          </div>
+          <div class="op-ba-content">
+            <div class="op-ba-item">
+              <span class="op-ba-label before">相談前</span>
+              <p class="op-ba-text">「自分が全部やらなければ」と抱え込み、孤独とプレッシャーに限界を感じていた。誰にも相談できずにいた。</p>
+            </div>
+            <div class="op-ba-item">
+              <span class="op-ba-label after">相談後</span>
+              <p class="op-ba-text">自分の本当の課題が整理され、幹部に権限を委譲できるようになった。心に余裕が生まれ、結果的に業績も向上。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-ba-card">
+          <div class="op-ba-header">
+            <span>小売業 ／ 40代 後継者</span>
+          </div>
+          <div class="op-ba-content">
+            <div class="op-ba-item">
+              <span class="op-ba-label before">相談前</span>
+              <p class="op-ba-text">偉大な先代との比較に苦しみ、自分には無理だと毎日会社を辞めたいと思い続けていた。</p>
+            </div>
+            <div class="op-ba-item">
+              <span class="op-ba-label after">相談後</span>
+              <p class="op-ba-text">先代のコピーではなく、自分なりの経営スタイルを言語化できた。今は「自分の会社」として向き合って経営できている。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       6. プロフィール
+  ==================== -->
+  <section class="op-section op-profile">
+    <div class="op-container">
+      <span class="op-section-label">相談相手について</span>
+      <h2 class="op-section-title">松本 興太（ONE PLANET 代表）</h2>
+
+      <div class="op-profile-flex">
+        <img
+          src="https://images.squarespace-cdn.com/content/v1/67ece8a53ba1c624c515c8e4/8fb38387-c300-4938-b03e-1a649d0f1dca/%E3%83%95%E3%82%9A%E3%83%AD%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB_%E6%9D%BE%E6%9C%AC_.jpg"
+          alt="松本 興太 - ONE PLANET 代表"
+          class="op-profile-img"
+        >
+        <div class="op-profile-text">
+          <h3>V字回復と事業譲渡、両方を経験した<br>コーチが伴走します。</h3>
+          <p>24歳で父の急逝により、従業員40名の中小企業を承継。業績をV字回復させ、その後、社員を守る形で事業譲渡を決断しました。</p>
+          <p>10年超の経営で、後継者としてのプレッシャー・先代との葛藤・誰にも言えない孤独のすべてを経験してきました。</p>
+          <p>承継の苦しみも、回復の喜びも、手放す痛みも、すべて実体験から。理論ではなく、「あなたの話」を伺います。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================
+       7. オファー（ベネフィット）
+  ==================== -->
+  <section class="op-section op-benefits">
+    <div class="op-container">
+      <span class="op-section-label">無料相談で得られること</span>
+      <h2 class="op-section-title">「辞めたい」から抜け出す<br>60分の使い方</h2>
+      <p class="op-benefits-lead">無理な決断を迫るものではありません。<br>経営者の鎧を脱いで、一度だけ本音を言える場所として使ってください。</p>
+
+      <ul class="op-benefit-list">
+        <li class="op-benefit-item">
+          <h3><span class="op-benefit-num">1</span>圧倒的な安心感</h3>
+          <p>親にも、社員にも言えない弱音・文句・不満を、否定されることなく安全に吐き出せます。「こんなことを思う自分はおかしい」と感じる必要はありません。</p>
+        </li>
+        <li class="op-benefit-item">
+          <h3><span class="op-benefit-num">2</span>頭の整理と軽さ</h3>
+          <p>「全部どうにかしなければ」という状態から、何が本当の問題なのかを分解します。漠然とした重さが「対処できる課題」に変わると、見える景色が変わります。</p>
+        </li>
+        <li class="op-benefit-item">
+          <h3><span class="op-benefit-num">3</span>希望と次の一歩</h3>
+          <p>「続けるか辞めるか」の二択ではなく、実体験に基づいた第三の選択肢が見えてきます。判断を急かしません。まず、自分が何を望んでいるかを一緒に確認します。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================
+       8. Closing CTA
+  ==================== -->
+  <section class="op-section op-closing">
+    <div class="op-container">
+      <h2 class="op-section-title">一人で考えるのは、<br>もうやめませんか。</h2>
+
+      <div class="op-closing-box">
+        <p class="op-closing-limit">
+          ※ 一人ひとりに全力で向き合うため、毎月3名様限定でお受けしています。
+        </p>
+        <ul class="op-check-list">
+          <li>完全無料（60分 ／ Zoomまたは対面）</li>
+          <li>秘密厳守（ご家族・社員に知られません）</li>
+          <li>相談後の強引な契約・勧誘は一切なし</li>
+        </ul>
+      </div>
+
+      <div class="op-cta-area" style="margin-top: 0;">
+        <a href="https://www.1planet.jp/contact" class="op-cta-btn">
+          まずは60分、話してみてください。
+        </a>
+      </div>
+
+      <p class="op-closing-note">
+        ※「何を話せばいいかわからない」という状態で大丈夫です。<br>
+        そのまま来てください。
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================
+       9. FAQ
+  ==================== -->
+  <section class="op-section" style="background: var(--op-bg-white);">
+    <div class="op-container">
+      <h2 class="op-section-title">ご不安な方へ<br>よくある質問</h2>
+
+      <div class="op-faq-list">
+        <div class="op-faq-item">
+          <div class="op-faq-q">本当に辞めたいわけではないのですが、相談してもいいですか？</div>
+          <div class="op-faq-a">もちろんです。「辞めたい」とはっきり思っていなくても、「なんとなく重い」「誰かに話を聞いてほしい」という状態で来ていただいて構いません。むしろ、限界を迎える前にお話しいただく方が、整理もしやすくなります。</div>
+        </div>
+        <div class="op-faq-item">
+          <div class="op-faq-q">相談したら、辞めることを勧められますか？</div>
+          <div class="op-faq-a">いいえ。私の役割は、辞めさせることでも、続けさせることでもありません。あなた自身が「自分で選べる状態」になれるよう、一緒に整理することです。答えはあなたの中にあります。</div>
+        </div>
+        <div class="op-faq-item">
+          <div class="op-faq-q">家族や社員には絶対に知られたくないのですが。</div>
+          <div class="op-faq-a">完全に秘密厳守です。Zoomでのオンライン相談も可能ですので、ご自宅・車の中・外出先など、ご自身が安心できる場所からご参加いただけます。ご連絡もすべてご本人だけに届きます。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- フッター -->
+  <footer class="op-footer">
+    <p>
+      株式会社ONE PLANET ／ <a href="https://www.1planet.jp" target="_blank">1planet.jp</a><br>
+      この相談は、経営者としてのあなたの「今の状態」を整理することを目的とするものです。<br>
+      医学的・心理学的な診断や評価を目的とするものではありません。
+    </p>
+  </footer>
+
+</div><!-- /.op-lp-wrapper -->
+
+</body>
+</html>
