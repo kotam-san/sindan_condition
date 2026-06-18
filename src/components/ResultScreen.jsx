@@ -11,6 +11,7 @@ export default function ResultScreen({ answers, freeText, onRestart }) {
   const [emailValue, setEmailValue]       = useState("")
   const [submitting, setSubmitting]       = useState(false)
   const [aiSuggestions, setAiSuggestions] = useState([])
+  const [agreed, setAgreed]               = useState(false)
 
   const axisScores = calcAxisScores(answers)
   const total      = calcTotal(answers)
@@ -19,7 +20,7 @@ export default function ResultScreen({ answers, freeText, onRestart }) {
 
   async function handleEmailSubmit(e) {
     e.preventDefault()
-    if (!emailValue.trim()) return
+    if (!emailValue.trim() || !agreed) return
     setSubmitting(true)
     const payload = {
       email: emailValue.trim(),
@@ -236,16 +237,41 @@ export default function ResultScreen({ answers, freeText, onRestart }) {
                 outline: "none",
               }}
             />
+
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "2px 4px 0" }}>
+              <input
+                type="checkbox"
+                id="privacy-agree"
+                checked={agreed}
+                onChange={e => setAgreed(e.target.checked)}
+                style={{
+                  marginTop: 3, width: 16, height: 16,
+                  cursor: "pointer", accentColor: C.accent, flexShrink: 0,
+                }}
+              />
+              <label htmlFor="privacy-agree" style={{
+                fontSize: 12, color: C.textSub, lineHeight: 1.7, cursor: "pointer",
+              }}>
+                <a
+                  href="https://www.1planet.jp/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: C.accent, textDecoration: "underline" }}
+                >プライバシーポリシー</a>
+                を確認し、診断結果と情報提供を受けることに同意します。
+              </label>
+            </div>
+
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !agreed}
               style={{
                 width: "100%", padding: "16px", borderRadius: 60,
-                background: submitting ? C.accentSoft : C.accent,
+                background: (submitting || !agreed) ? C.accentSoft : C.accent,
                 color: "#fff", fontSize: 15, fontWeight: 600,
-                border: "none", cursor: submitting ? "default" : "pointer",
+                border: "none", cursor: (submitting || !agreed) ? "default" : "pointer",
                 letterSpacing: "0.05em",
-                boxShadow: submitting ? "none" : `0 4px 16px ${C.accent}50`,
+                boxShadow: (submitting || !agreed) ? "none" : `0 4px 16px ${C.accent}50`,
               }}
             >
               {submitting ? "AIヒントを作成しています…" : "無料でヒントを見る"}
